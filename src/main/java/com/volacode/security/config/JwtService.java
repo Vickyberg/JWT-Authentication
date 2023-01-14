@@ -1,5 +1,6 @@
 package com.volacode.security.config;
 
+import com.volacode.security.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -32,19 +33,19 @@ public class JwtService {
     }
 
     //generate token using user details
-    public  String generateToken(UserDetails userDetails){
-        return  generateToken(new HashMap<>(), userDetails);
+    public  String generateToken(User user){
+        return  generateToken(new HashMap<>(), user);
     }
 
 
     //Helps to generate a token from extra claims
     public String generateToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails
+            User user
     ){
         return Jwts.builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(SignatureAlgorithm.HS256, getSignInKey())
